@@ -1,0 +1,94 @@
+{% extends "layout.html" %}
+{% block title %}Admin Panel{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+
+    <!-- Page Title -->
+    <h2 class="text-center mb-4" style="color:#358d5f;">አስተዳደር </h2>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <!-- Search Card -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-success text-white">መፈለጊያ</div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('admin_search') }}">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    <input type="text" name="search_id" class="form-control" placeholder="መለያ ቁጥር ወይም ስም ያስገቡ">
+                    <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i> ፈልግ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Students Table Card -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-info text-white">የተመዘገቡ ተማሪዎች</div>
+        <div class="card-body table-responsive">
+            <table class="table table-hover table-bordered align-middle text-center mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>ስም</th>
+                        <th>የመግቢያ ቀን</th>
+                        <th>ተማሪ/ሰራተኛ</th>
+                        <th>ፎቶ</th>
+                        <th>የሚያገለግሉበት ክፍል</th>
+                        <th>PDF</th>
+                        <th>ማጥፋት</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr class="align-middle">
+                        <td>{{ student['id_number'] }}</td>
+                        <td>{{ student['name'] }}</td>
+                        <td>{{ student['entry_date'] if student['entry_date'] else '-' }}</td>
+                        <td>{{ student['type'] }}</td>
+                        <td>
+                            {% if student['photo'] %}
+                            <img src="{{ url_for('static', filename='uploads/' ~ student['photo']) }}" width="50" class="rounded-circle border">
+                            {% else %}
+                            ፎቶ የለም
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if student['volunteer'] %}
+                            {{ student['volunteer']|join('፣ ') }}
+                            {% else %}
+                            -
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if student['id_number'] %}
+                            <a href="{{ url_for('generate_pdf', student_id=student['id_number']) }}" class="btn btn-success btn-sm" target="_blank">
+                                PDF
+                            </a>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <form method="POST" action="{{ url_for('delete_student', student_id=student['id_number']) }}" 
+      onsubmit="return confirm('እርግጠኛ ነህ ይህን መረጃ ማጥፋት ይፈልጋሉ?');">
+    <button type="submit" class="btn btn-danger btn-sm">ማጥፋት</button>
+</form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

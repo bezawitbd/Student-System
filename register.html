@@ -1,0 +1,224 @@
+{% extends "layout.html" %}
+{% block title %}Student Registration{% endblock %}
+{% block content %}
+<h2 class="text-center mb-4" style="color:#358d5f;">የተማሪ መመዝገቢያ ቅጽ</h2>
+
+<form method="POST" enctype="multipart/form-data">
+
+    <!-- Personal Info Card -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-success text-white"> የግል መረጃ</div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="id_number" class="form-label">መለያ ቁጥር</label>
+                    <input type="text" class="form-control" id="id_number" name="id_number" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="name" class="form-label">ሙሉ ስም</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="fathers_name" class="form-label">የአባት ሙሉ ስም</label>
+                    <input type="text" class="form-control" id="fathers_name" name="fathers_name" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="mother_name" class="form-label">የእናት ሙሉ ስም</label>
+                    <input type="text" class="form-control" id="mother_name" name="mother_name" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="christanity_name" class="form-label">የክርስትና ስም</label>
+                    <input type="text" class="form-control" id="christanity_name" name="christanity_name" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="entry_date" class="form-label">ወደ ሀ ወጣት ክፍል መቼ ገቡ</label>
+                    <input type="date" class="form-control" id="entry_date" name="entry_date" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="type" class="form-label">ተማሪ ወይስ ሰራተኛ</label>
+                    <select class="form-select" id="type" name="type" required onchange="showTypeFields()">
+                        <option value="">እባክዎን ይምረጡ</option>
+                        <option value="ተማሪ">ተማሪ</option>
+                        <option value="ሰራተኛ">ሰራተኛ</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Student fields -->
+            <div id="studentFields" style="display:none;" class="mt-3">
+                <label for="class" class="form-label">የክፍል ደረጃ</label>
+                <input type="text" class="form-control" id="class" name="class">
+            </div>
+
+            <!-- Worker fields -->
+            <div id="workerFields" style="display:none;" class="mt-3">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="department" class="form-label">የተመረቁበት የትምህርት ዘርፍ</label>
+                        <input type="text" class="form-control" id="department" name="department">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="field" class="form-label">የስራ ዘርፍ</label>
+                        <input type="text" class="form-control" id="field" name="field">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="experience" class="form-label">የስራ ልምድ</label>
+                        <input type="text" class="form-control" id="experience" name="experience">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="company" class="form-label">የመስሪያ ቤት ስም</label>
+                        <input type="text" class="form-control" id="company" name="company">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Emergency Info Card -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-warning text-dark">የአደጋ ጊዜ መረጃ</div>
+        <div class="card-body row g-3">
+            <div class="col-md-6">
+                <label for="emergency_name" class="form-label">የአደጋ ጊዜ ተጠሪ</label>
+                <input type="text" class="form-control" id="emergency_name" name="emergency_name">
+            </div>
+            <div class="col-md-6">
+                <label for="emergency_phone" class="form-label">የአደጋ ጊዜ ተጠሪ ስልክ</label>
+                <input type="text" class="form-control" id="emergency_phone" name="emergency_phone">
+            </div>
+        </div>
+    </div>
+
+    <!-- Father Info Card -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-info text-white">የንስሀ አባት መረጃ</div>
+        <div class="card-body">
+            <div class="mb-3">
+                <label for="father_status" class="form-label">የንስሀ አባት አሎት</label>
+                <select class="form-select" id="father_status" name="father_status" onchange="showFatherFields()">
+                    <option value="">እባክዎን ይምረጡ</option>
+                    <option value="አለኝ">አለኝ</option>
+                    <option value="የለኝም">የለኝም</option>
+                </select>
+            </div>
+            <div id="fatherFields" style="display:none;">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label for="father_name" class="form-label">የንስሀ አባት ስም</label>
+                        <input type="text" class="form-control" id="father_name" name="father_name">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="father_phone" class="form-label">የንስሀ አባት ስልክ</label>
+                        <input type="text" class="form-control" id="father_phone" name="father_phone">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="father_place" class="form-label">የንስሀ አባት የሚያገለግሉበት ደብር</label>
+                        <input type="text" class="form-control" id="father_place" name="father_place">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Other Info Card -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-primary text-white">ተጨማሪ መረጃ</div>
+        <div class="card-body row g-3">
+            <div class="col-md-4">
+                <label for="phone" class="form-label">ስልክ</label>
+                <input type="text" class="form-control" id="phone" name="phone">
+            </div>
+            <div class="col-md-4">
+                <label for="gender" class="form-label">ፆታ</label>
+                <select class="form-select" id="gender" name="gender">
+                    <option value="">እባክዎን ይምረጡ</option>
+                    <option value="ወንድ">ወንድ</option>
+                    <option value="ሴት">ሴት</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="birth_date" class="form-label">የትውልድ ቀን</label>
+                <input type="date" class="form-control" id="birth_date" name="birth_date" required>
+            </div>
+            <div class="col-md-4">
+                <label for="age" class="form-label">እድሜ</label>
+                <input type="number" class="form-control" id="age" name="age">
+            </div>
+            <div class="col-md-8">
+                <label for="address" class="form-label">አድራሻ</label>
+                <input type="text" class="form-control" id="address" name="address">
+            </div>
+            <div class="col-md-4">
+                <label for="house_number" class="form-label">የቤት ቁጥር</label>
+                <input type="text" class="form-control" id="house_number" name="house_number">
+            </div>
+            <div class="col-md-4">
+                <label for="wereda" class="form-label">ወረዳ</label>
+                <input type="text" class="form-control" id="wereda" name="wereda">
+            </div>
+            <div class="col-md-4">
+                <label for="kebele" class="form-label">ቀበሌ</label>
+                <input type="text" class="form-control" id="kebele" name="kebele">
+            </div>
+            <div class="col-md-4">
+                <label for="city" class="form-label">ከተማ</label>
+                <input type="text" class="form-control" id="city" name="city">
+            </div>
+            <div class="col-md-4">
+                <label for="marital_status" class="form-label">የትዳር ሁኔታ</label>
+                <select class="form-select" id="marital_status" name="marital_status">
+                    <option value="">እባክዎን ይምረጡ</option>
+                    <option value="ነፃ">ነፃ</option>
+                    <option value="ያልተገባ">ያልተገባ</option>
+                </select>
+            </div>
+            <div class="col-md-12">
+                <label class="form-label">የሚያገለግሉበት ክፍል (3 ብቻ ይምረጡ)</label>
+                <div class="row">
+                    {% for vol in ['ትምህርት ክፍል','ሰው ሀብት ክፍል','ግንኙነት ክፍል','ህጻናትና ታዳጊ ክፍል','መረጃና መዛግብት ክፍል','ሂሳብና ንብረት ክፍል','ልማት ክፍል','በጎ አድራጎት ክፍል'] %}
+                    <div class="col-md-3">
+                        <div class="form-check">
+                            <input class="form-check-input volunteer-checkbox" type="checkbox" name="volunteer[]" value="{{ vol }}">
+                            <label class="form-check-label">{{ vol }}</label>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-12">
+                <label for="photo" class="form-label">ፎቶ አስገባ</label>
+                <input type="file" class="form-control" id="photo" name="photo" accept="image/*">
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mb-5">
+        <button type="submit" class="btn btn-success btn-lg">አስገባ</button>
+    </div>
+
+</form>
+
+<script>
+function showTypeFields(){
+    var type = document.getElementById('type').value;
+    document.getElementById('studentFields').style.display = (type=='ተማሪ')?'block':'none';
+    document.getElementById('workerFields').style.display = (type=='ሰራተኛ')?'block':'none';
+}
+function showFatherFields(){
+    var status = document.getElementById('father_status').value;
+    document.getElementById('fatherFields').style.display = (status=='አለኝ')?'block':'none';
+}
+
+// Limit volunteer to 3
+const checkboxes = document.querySelectorAll('.volunteer-checkbox');
+checkboxes.forEach(box=>{
+    box.addEventListener('change',()=>{
+        const checked = document.querySelectorAll('.volunteer-checkbox:checked');
+        if(checked.length>3){
+            box.checked=false;
+            alert('ከ3 ብቻ ምርጫ መፈቀድ ይቻላል!');
+        }
+    });
+});
+</script>
+{% endblock %}
