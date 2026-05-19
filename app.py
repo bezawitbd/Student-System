@@ -250,3 +250,10 @@ def generate_pdf(student_id):
     pdf.output(pdf_file)
     return send_file(pdf_file, as_attachment=True)
 
+
+import os
+
+port = int(os.environ.get("PORT", 5000))
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=port)   
